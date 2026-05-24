@@ -1,0 +1,527 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); }
+.wrap { padding: 1.5rem 0; }
+.section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; }
+.card h3 { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+.card p { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
+.badge-red { background: var(--color-background-danger); color: var(--color-text-danger); }
+.badge-green { background: var(--color-background-success); color: var(--color-text-success); }
+.badge-info { background: var(--color-background-info); color: var(--color-text-info); }
+.badge-warn { background: var(--color-background-warning); color: var(--color-text-warning); }
+.segment-row { display: flex; align-items: stretch; gap: 8px; margin-bottom: 8px; }
+.seg-label { font-size: 12px; font-weight: 500; width: 160px; flex-shrink: 0; padding: 8px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); display: flex; align-items: center; }
+.seg-bar-wrap { flex: 1; display: flex; align-items: center; gap: 8px; }
+.seg-bar { height: 8px; border-radius: 4px; transition: width 0.4s; }
+.seg-tag { font-size: 11px; color: var(--color-text-secondary); white-space: nowrap; }
+.tab-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.tab-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+.tab-btn.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.persona-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; }
+.persona-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.persona-name { font-size: 14px; font-weight: 500; }
+.persona-sub { font-size: 12px; color: var(--color-text-secondary); }
+.trait-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.trait { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 10px; }
+.trait-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 2px; }
+.trait-val { font-size: 12px; font-weight: 500; }
+.gap-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-left: 3px solid; border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; }
+.gap-num { font-size: 22px; font-weight: 500; margin-right: 12px; }
+.gap-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.gap-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+.product-row { padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.product-row:last-child { border-bottom: none; }
+.product-name { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+.product-detail { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 2px; }
+.price-pill { display: inline-block; font-size: 11px; padding: 2px 8px; background: var(--color-background-success); color: var(--color-text-success); border-radius: 4px; font-weight: 500; margin-right: 6px; }
+.diff-pill { display: inline-block; font-size: 11px; padding: 2px 8px; background: var(--color-background-info); color: var(--color-text-info); border-radius: 4px; font-weight: 500; }
+.metric-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1rem; }
+.metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; text-align: center; }
+.metric-val { font-size: 20px; font-weight: 500; margin-bottom: 2px; }
+.metric-lbl { font-size: 11px; color: var(--color-text-secondary); }
+.star { color: #EF9F27; }
+.rec-box { background: var(--color-background-info); border: 0.5px solid var(--color-border-info); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+.rec-box h3 { font-size: 16px; font-weight: 500; color: var(--color-text-info); margin-bottom: 8px; }
+.rec-box p { font-size: 13px; color: var(--color-text-primary); line-height: 1.7; }
+.content-idea { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.content-idea:last-child { border-bottom: none; }
+.idea-num { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); min-width: 20px; }
+.idea-text { font-size: 13px; line-height: 1.5; }
+.idea-type { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.supply-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+.supply-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; }
+.supply-card h4 { font-size: 12px; font-weight: 500; margin-bottom: 6px; }
+.supply-card p { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; }
+.final-verdict { border: 2px solid var(--color-border-info); border-radius: var(--border-radius-lg); padding: 1.5rem; }
+.verdict-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 1rem; }
+.verdict-item { text-align: center; padding: 10px; }
+.verdict-num { font-size: 24px; font-weight: 500; margin-bottom: 4px; }
+.verdict-label { font-size: 11px; color: var(--color-text-secondary); }
+</style>
+
+<div class="wrap">
+
+<div class="metric-row">
+  <div class="metric">
+    <div class="metric-val">₹2.26L Cr</div>
+    <div class="metric-lbl">Market size 2024</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">10.9%</div>
+    <div class="metric-lbl">Online CAGR 2025–29</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">$5.4B</div>
+    <div class="metric-lbl">D2C home decor 2025</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">32%</div>
+    <div class="metric-lbl">Online channel share</div>
+  </div>
+</div>
+
+<div class="tab-row">
+  <button class="tab-btn active" onclick="switchTab('market')">Market map</button>
+  <button class="tab-btn" onclick="switchTab('personas')">Personas</button>
+  <button class="tab-btn" onclick="switchTab('gaps')">Gaps</button>
+  <button class="tab-btn" onclick="switchTab('products')">Products</button>
+  <button class="tab-btn" onclick="switchTab('gtm')">Go-to-market</button>
+  <button class="tab-btn" onclick="switchTab('supply')">Supply & margins</button>
+  <button class="tab-btn" onclick="switchTab('verdict')">Final verdict</button>
+</div>
+
+<div id="tab-market" class="tab-panel active">
+  <div class="section-title">Segment saturation map</div>
+  
+  <div class="segment-row">
+    <div class="seg-label">Scented candles / fragrance</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:88%;background:#E24B4A;"></div>
+      <span class="seg-tag"><span class="badge badge-red">Saturated</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Generic wall art / posters</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:85%;background:#E24B4A;"></div>
+      <span class="seg-tag"><span class="badge badge-red">Saturated</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Cushion covers / bedding</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:80%;background:#E24B4A;"></div>
+      <span class="seg-tag"><span class="badge badge-red">Saturated</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Photo frames</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:75%;background:#E24B4A;"></div>
+      <span class="seg-tag"><span class="badge badge-red">Saturated</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Handcrafted / artisan decor</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:55%;background:#EF9F27;"></div>
+      <span class="seg-tag"><span class="badge badge-warn">Competitive</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Premium decorative lighting</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:45%;background:#EF9F27;"></div>
+      <span class="seg-tag"><span class="badge badge-warn">Competitive</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Aesthetic decor bundles / gifts</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:35%;background:#639922;"></div>
+      <span class="seg-tag"><span class="badge badge-green">Underserved</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Renter-friendly / no-drill decor</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:20%;background:#639922;"></div>
+      <span class="seg-tag"><span class="badge badge-green">Gap</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Biophilic / nature-in-home</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:22%;background:#639922;"></div>
+      <span class="seg-tag"><span class="badge badge-green">Emerging</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Modular / WFH-zone decor</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:18%;background:#185FA5;"></div>
+      <span class="seg-tag"><span class="badge badge-info">Untapped</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Textured wall panels (DIY)</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:15%;background:#185FA5;"></div>
+      <span class="seg-tag"><span class="badge badge-info">Untapped</span></span>
+    </div>
+  </div>
+  <div class="segment-row">
+    <div class="seg-label">Indian-modern fusion gifting</div>
+    <div class="seg-bar-wrap">
+      <div class="seg-bar" style="width:25%;background:#639922;"></div>
+      <span class="seg-tag"><span class="badge badge-green">Underserved</span></span>
+    </div>
+  </div>
+
+  <div style="margin-top: 1.5rem;">
+    <div class="section-title">Key signals from platforms</div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Amazon India</h3>
+        <p>3D wall art, decorative lighting, multifunctional storage decor among top movers. Common complaints: misrepresented colors, poor packaging on fragile items, generic aesthetics. Price sweet spot: ₹500–₹1,800.</p>
+      </div>
+      <div class="card">
+        <h3>Instagram / Reels</h3>
+        <p>"Apartment transformation" content goes viral. Renter-friendly decor hacks, earthy tones (terracotta, muted olive), biophilic elements. Creators with <50K followers driving real purchase decisions in tier-1/2 cities.</p>
+      </div>
+      <div class="card">
+        <h3>Pinterest / Etsy signals</h3>
+        <p>Global demand for "Indian boho," Madhubani-inspired modern art, brass + natural material combos. India-to-global export opportunity exists here. Handmade + storytelling wins premium pricing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-personas" class="tab-panel">
+  <div class="section-title">5 high-priority customer personas</div>
+
+  <div class="persona-card">
+    <div class="persona-header">
+      <div class="avatar" style="background:#E1F5EE;">🧳</div>
+      <div>
+        <div class="persona-name">Priya — The Renting Urban Professional</div>
+        <div class="persona-sub">26–33 yrs • ₹60K–₹1.2L/mo • Mumbai / Bengaluru / Pune</div>
+      </div>
+    </div>
+    <div class="trait-grid">
+      <div class="trait"><div class="trait-label">Living situation</div><div class="trait-val">Renting 1–2 BHK, shared flat or solo</div></div>
+      <div class="trait"><div class="trait-label">Buying trigger</div><div class="trait-val">Moving into new flat, Instagram inspo</div></div>
+      <div class="trait"><div class="trait-label">Budget</div><div class="trait-val">₹500–₹3,000 per purchase</div></div>
+      <div class="trait"><div class="trait-label">Core pain point</div><div class="trait-val">Can't drill walls, landlord restrictions, rented space feels impersonal</div></div>
+    </div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-header">
+      <div class="avatar" style="background:#FAEEDA;">💍</div>
+      <div>
+        <div class="persona-name">Aarav & Sneha — Newly Married Couple</div>
+        <div class="persona-sub">28–35 yrs • ₹1.2L–₹2.5L/mo combined • Setting up first home</div>
+      </div>
+    </div>
+    <div class="trait-grid">
+      <div class="trait"><div class="trait-label">Living situation</div><div class="trait-val">Own flat or rented, decorating fresh</div></div>
+      <div class="trait"><div class="trait-label">Buying trigger</div><div class="trait-val">Wedding, housewarming, Instagram aesthetic goals</div></div>
+      <div class="trait"><div class="trait-label">Budget</div><div class="trait-val">₹8K–₹30K total home decor budget</div></div>
+      <div class="trait"><div class="trait-label">Core pain point</div><div class="trait-val">Decision fatigue, want cohesive look, don't know where to start</div></div>
+    </div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-header">
+      <div class="avatar" style="background:#EEEDFE;">🎁</div>
+      <div>
+        <div class="persona-name">Kavitha — The Festival/Wedding Gifter</div>
+        <div class="persona-sub">30–50 yrs • ₹80K–₹2L/mo • Diwali, housewarming, weddings</div>
+      </div>
+    </div>
+    <div class="trait-grid">
+      <div class="trait"><div class="trait-label">Living situation</div><div class="trait-val">Established homeowner, gifting for others</div></div>
+      <div class="trait"><div class="trait-label">Buying trigger</div><div class="trait-val">Festivals (Diwali, Navratri), weddings, housewarmings</div></div>
+      <div class="trait"><div class="trait-label">Budget</div><div class="trait-val">₹1,000–₹5,000 per gift</div></div>
+      <div class="trait"><div class="trait-label">Core pain point</div><div class="trait-val">Wants unique, non-generic gift. Dry fruits + sweets feel outdated. Gift hampers look cheap online.</div></div>
+    </div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-header">
+      <div class="avatar" style="background:#FAECE7;">💻</div>
+      <div>
+        <div class="persona-name">Rahul — WFH Millennial Optimiser</div>
+        <div class="persona-sub">27–36 yrs • ₹80K–₹1.8L/mo • Bengaluru / Delhi NCR / Hyderabad</div>
+      </div>
+    </div>
+    <div class="trait-grid">
+      <div class="trait"><div class="trait-label">Living situation</div><div class="trait-val">Hybrid WFH setup, needs aesthetic desk zone</div></div>
+      <div class="trait"><div class="trait-label">Buying trigger</div><div class="trait-val">New job, LinkedIn profile photo, productivity upgrade</div></div>
+      <div class="trait"><div class="trait-label">Budget</div><div class="trait-val">₹2,000–₹8,000 for a WFH corner makeover</div></div>
+      <div class="trait"><div class="trait-label">Core pain point</div><div class="trait-val">Background looks bad on Zoom. Generic decor. No curated "WFH look" bundle exists.</div></div>
+    </div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-header">
+      <div class="avatar" style="background:#EAF3DE;">🌿</div>
+      <div>
+        <div class="persona-name">Meera — The Conscious Aesthetic Homemaker</div>
+        <div class="persona-sub">32–45 yrs • ₹1.5L–₹3.5L/mo • Metro + tier-2 towns</div>
+      </div>
+    </div>
+    <div class="trait-grid">
+      <div class="trait"><div class="trait-label">Living situation</div><div class="trait-val">Own home, wants to upgrade systematically</div></div>
+      <div class="trait"><div class="trait-label">Buying trigger</div><div class="trait-val">Renovation, sustainability values, Instagram reels</div></div>
+      <div class="trait"><div class="trait-label">Budget</div><div class="trait-val">₹5,000–₹25,000 per room refresh</div></div>
+      <div class="trait"><div class="trait-label">Core pain point</div><div class="trait-val">Wants eco-friendly, Indian craft-based, and modern — but can't find all three together</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-gaps" class="tab-panel">
+  <div class="section-title">5 validated market gaps</div>
+
+  <div class="gap-card" style="border-left-color:#185FA5;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+      <span class="gap-num" style="color:#185FA5;">01</span>
+      <span class="gap-title">Renter-friendly, no-drill aesthetic decor</span>
+    </div>
+    <div class="gap-desc">30M+ urban renters cannot drill walls. Zero brands have specifically built a "renter's decor" product range. Command strips exist but look cheap. Adhesive wall panels, peel-and-stick art, hanging systems with Indian aesthetics — this segment has no clear owner in India. Global signals from Etsy and Pinterest are massive. Price sensitivity: ₹500–₹2,500.</div>
+  </div>
+
+  <div class="gap-card" style="border-left-color:#0F6E56;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+      <span class="gap-num" style="color:#0F6E56;">02</span>
+      <span class="gap-title">Curated "first home" bundles for newly married couples</span>
+    </div>
+    <div class="gap-desc">India has ~9 million weddings/year. Every couple needs to furnish from scratch. No brand offers a cohesive ₹3,000–₹8,000 "start here" bundle — a curated set of 5–8 pieces that create an instant aesthetic. Pepperfry and Nestasia sell individual items; nobody sells a "complete vibe" at an accessible price. This is a massive gifting + self-purchase overlap opportunity.</div>
+  </div>
+
+  <div class="gap-card" style="border-left-color:#854F0B;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+      <span class="gap-num" style="color:#854F0B;">03</span>
+      <span class="gap-title">Premium home decor gifting with Indian-modern design identity</span>
+    </div>
+    <div class="gap-desc">The corporate and festival gifting market in India is ₹60,000+ Cr. Most gift hampers are predictable (dry fruits, generic candles). No D2C brand has owned "thoughtful, aesthetic, Indian-rooted home decor gifting" at the ₹1,500–₹4,500 price point. ITC entered scented candles in 2025 — the signal that this category is being taken seriously by large players, which means the window is now, not later.</div>
+  </div>
+
+  <div class="gap-card" style="border-left-color:#533AB7;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+      <span class="gap-num" style="color:#533AB7;">04</span>
+      <span class="gap-title">Aesthetic WFH / desk-zone decor bundles</span>
+    </div>
+    <div class="gap-desc">25M+ hybrid workers in India want a background that looks good on video calls. No brand offers a "WFH corner bundle" — a curated set of a small plant/succulent, a textured wall element, a desk lamp, and a ceramic piece that ship together as a kit. This is a precision opportunity: clear purchase trigger (new job, home office setup), Instagram-friendly content, no incumbent owning the space.</div>
+  </div>
+
+  <div class="gap-card" style="border-left-color:#993C1D;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+      <span class="gap-num" style="color:#993C1D;">05</span>
+      <span class="gap-title">DIY textured wall panels — Indian aesthetic, accessible price</span>
+    </div>
+    <div class="gap-desc">Textured walls are a top 2025 interior design trend in India. Currently only available through expensive interior designers (₹80,000+ per wall). No affordable DIY product exists. Peel-and-apply 3D wall panels with Indian motifs (jaali patterns, geometric, earthy tones) at ₹1,200–₹3,000 for a feature wall kit is a completely unclaimed product category. Viral potential on Reels is massive.</div>
+  </div>
+</div>
+
+<div id="tab-products" class="tab-panel">
+  <div class="section-title">Concrete products — prioritized by feasibility and margin</div>
+
+  <div style="margin-bottom:1.5rem;">
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--color-text-secondary);">Gap 01 — Renter-friendly decor</div>
+    <div class="product-row">
+      <div class="product-name">Adhesive Fabric Wall Panels — "Indian Boho" collection</div>
+      <div class="product-detail">Removable, reusable fabric wall panels in terracotta/ochre/sage prints. 3-panel sets, 2ft × 2ft, hang with adhesive clips included.</div>
+      <div><span class="price-pill">₹799–₹1,499 / set</span><span class="diff-pill">No direct competitor in India</span></div>
+    </div>
+    <div class="product-row">
+      <div class="product-name">Peel-and-Press 3D Wall Art Tiles — Jaali / Geometric motifs</div>
+      <div class="product-detail">Self-adhesive foam+fabric tiles with Indian-pattern emboss. 6-tile pack covers 2sqft feature wall. Fully removable.</div>
+      <div><span class="price-pill">₹1,199–₹2,499 / pack</span><span class="diff-pill">Viral Reels content potential</span></div>
+    </div>
+    <div class="product-row">
+      <div class="product-name">Tapestry Headboard Alternative Kit</div>
+      <div class="product-detail">Large woven tapestry (90×60in) + wooden rod + adhesive ceiling hooks. Replaces a headboard in rented rooms with no drilling required.</div>
+      <div><span class="price-pill">₹1,499–₹2,999</span><span class="diff-pill">Etsy global bestseller format, no India equivalent</span></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:1.5rem;">
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--color-text-secondary);">Gap 02 — First home bundles</div>
+    <div class="product-row">
+      <div class="product-name">"New Home" Starter Bundle — The Earthy Edit</div>
+      <div class="product-detail">7-piece curated set: ceramic vase, tray, 2 terracotta pots, woven table runner, candle, and wall art print. One aesthetic, one box.</div>
+      <div><span class="price-pill">₹2,499–₹3,999</span><span class="diff-pill">Gifting + self-purchase overlap</span></div>
+    </div>
+    <div class="product-row">
+      <div class="product-name">Housewarming Gift Box — Luxury Indian-Modern</div>
+      <div class="product-detail">Brass incense holder, hand-poured soy candle, printed linen coasters, block-print cushion cover. Branded packaging, ribbon-ready.</div>
+      <div><span class="price-pill">₹1,800–₹3,500</span><span class="diff-pill">Premium unboxing, Instagram gifting moment</span></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:1.5rem;">
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--color-text-secondary);">Gap 04 — WFH decor bundles (HIGHEST PRIORITY)</div>
+    <div class="product-row">
+      <div class="product-name">"Background Glow" WFH Corner Kit</div>
+      <div class="product-detail">3-piece kit: textured adhesive wall panel (for behind the chair), small succulent in a concrete pot, warm LED desk lamp with dimmer. Curated for video call backgrounds.</div>
+      <div><span class="price-pill">₹2,799–₹4,499</span><span class="diff-pill">Zero incumbents, hyper-specific use case</span></div>
+    </div>
+    <div class="product-row">
+      <div class="product-name">Modular Shelf-Styling Starter Kit</div>
+      <div class="product-detail">5 curated objects (mini plant, book holder, ceramic jar, woven basket, small art print) sized to style a floating shelf as a video-call background. Designed to "fit IKEA Kallax / Billy shelves".</div>
+      <div><span class="price-pill">₹1,999–₹3,499</span><span class="diff-pill">IKEA-accessory positioning, search-rich</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--color-text-secondary);">Gap 05 — DIY textured wall panels</div>
+    <div class="product-row">
+      <div class="product-name">DIY Feature Wall Kit — "Jaali Texture" Edition</div>
+      <div class="product-detail">8 interlocking foam+resin panels (30×30cm each), covers ~0.72sqm feature wall. Indian geometric lattice pattern. No tools needed. Includes adhesive tape.</div>
+      <div><span class="price-pill">₹1,499–₹2,999</span><span class="diff-pill">Transformation video = viral marketing built in</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-gtm" class="tab-panel">
+  <div class="section-title">Go-to-market strategy</div>
+
+  <div class="rec-box">
+    <h3>Validate fast — before investing in inventory</h3>
+    <p>Post 5 transformation Reels using existing products (sourced from Sarojini/Chandni Chowk) before manufacturing anything. DM people who save/share. If 3+ people ask "where do I buy this?" within 24 hours of posting — that's your green light. Then produce 30 units. Sell via Instagram DM first. Only then list on Amazon/Meesho.</p>
+  </div>
+
+  <div class="section-title" style="margin-bottom:0.75rem;">10 content ideas that drive sales</div>
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="content-idea">
+      <div class="idea-num">1</div>
+      <div><div class="idea-text">"I transformed my rented flat bedroom in 3 hours with ₹2,500 — here's everything I used" [before/after Reel]</div><div class="idea-type">Format: 30-sec Reel • Trigger: renter pain point • Expected saves: very high</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">2</div>
+      <div><div class="idea-text">"My WFH desk corner makeover — what my background looked like before vs after" [transition video]</div><div class="idea-type">Format: Reel • Trigger: work-from-home identity • Tag: #workedfromhome</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">3</div>
+      <div><div class="idea-text">"5 things every new home NEEDS in the first week (under ₹5,000 total)" [carousel]</div><div class="idea-type">Format: Carousel • Trigger: new home anxiety • High share rate</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">4</div>
+      <div><div class="idea-text">"Housewarming gift that actually makes someone say WOW" [unboxing Reel]</div><div class="idea-type">Format: Unboxing Reel • Trigger: festival / gifting season</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">5</div>
+      <div><div class="idea-text">"I don't own my flat — so here's how I made it feel like home without a single nail" [story-led Reel]</div><div class="idea-type">Format: Reel • Emotional trigger for renters</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">6</div>
+      <div><div class="idea-text">"Shelf-styling a ₹2,000 IKEA Kallax — the products I used" [product link + story]</div><div class="idea-type">Format: Carousel + Story link • Accessory play on IKEA searches</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">7</div>
+      <div><div class="idea-text">"Apartment renter rating: the 7 things that ACTUALLY work (no drill!)" [listicle Reel]</div><div class="idea-type">Format: Reel with text overlay • Utility-driven shares</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">8</div>
+      <div><div class="idea-text">Customer room transformation: DM renters who follow you, feature their rooms before/after using your products [UGC campaign]</div><div class="idea-type">Format: UGC story feature + Reel • Community-building + social proof</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">9</div>
+      <div><div class="idea-text">"The ₹3,000 housewarming gift I'm giving my sister — and what's inside" [gifting Reel]</div><div class="idea-type">Format: Reel • Gifting decision trigger • Festival season spike</div></div>
+    </div>
+    <div class="content-idea">
+      <div class="idea-num">10</div>
+      <div><div class="idea-text">"Indian modern aesthetic in a 1BHK — how I did it for under ₹8,000" [complete room tour]</div><div class="idea-type">Format: YouTube short / long Reel • Aspirational + educational</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Channel sequencing</div>
+  <div class="grid-3">
+    <div class="card"><h3>Month 1–2</h3><p>Instagram DMs + WhatsApp. Manual orders. Zero inventory risk. Test messaging and price tolerance. Target: 30–50 units sold.</p></div>
+    <div class="card"><h3>Month 3–4</h3><p>Open Shopify store. List on Meesho and Amazon. Run 2–3 micro-influencer collabs (5K–30K followers). Target: 150–300 orders/month.</p></div>
+    <div class="card"><h3>Month 5–6</h3><p>Introduce subscription gifting (quarterly box). Corporate gifting outreach for Diwali. Push ONDC listing. Target: ₹3–5L MRR.</p></div>
+  </div>
+</div>
+
+<div id="tab-supply" class="tab-panel">
+  <div class="section-title">Supply & manufacturing</div>
+
+  <div class="supply-row">
+    <div class="supply-card"><h4>Fabric wall panels</h4><p>Source block-print fabric from Jaipur/Bagru artisan clusters. Foam backing from Delhi NCR suppliers. ₹180–₹280 COGS per panel set. Sell at ₹799–₹1,499. Margin: 55–65%.</p></div>
+    <div class="supply-card"><h4>Curated bundles</h4><p>Aggregate from 3–4 artisan suppliers (Rajasthan ceramics, Bengal textiles, Delhi brass). Assemble + brand in-house. COGS: ₹900–₹1,400. Sell: ₹2,499–₹3,999. Margin: 50–60%.</p></div>
+    <div class="supply-card"><h4>3D wall panels</h4><p>Foam + resin panels from Noida/Gurgaon industrial suppliers. Custom mould for Indian motif needed (₹40K one-time). COGS: ₹350–₹500/pack. Sell: ₹1,499–₹2,999. Margin: 65–75%.</p></div>
+  </div>
+
+  <div class="section-title">Unit economics model (illustrative)</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Curated "First Home" Bundle</h3>
+      <p>Selling price: ₹2,999 · COGS: ₹950 · Packaging: ₹120 · Shipping: ₹90 · Platform fee (Amazon 15%): ₹450 · Marketing/CAC: ₹300 <strong>→ Net margin: ~₹1,089 (~36%)</strong></p>
+    </div>
+    <div class="card">
+      <h3>WFH Corner Kit</h3>
+      <p>Selling price: ₹3,499 · COGS: ₹1,100 · Packaging: ₹150 · Shipping: ₹100 · Platform fee: ₹525 · Marketing/CAC: ₹350 <strong>→ Net margin: ~₹1,274 (~36%)</strong></p>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:1rem;">Sourcing risk map</div>
+  <div class="grid-3">
+    <div class="card"><h3>Low risk</h3><p>Textiles, ceramics, woven goods — massive artisan supplier base across Rajasthan, Gujarat, West Bengal. No single point of failure.</p></div>
+    <div class="card"><h3>Medium risk</h3><p>3D foam/resin panels need industrial supplier. 4–6 week lead time. Start with a single supplier and second-source in month 3.</p></div>
+    <div class="card"><h3>Watch out</h3><p>BIS norms on imported MDF (2025) tighten supply. Avoid products dependent on imported raw materials in year 1.</p></div>
+  </div>
+</div>
+
+<div id="tab-verdict" class="tab-panel">
+  <div class="final-verdict">
+    <div class="badge badge-info" style="margin-bottom:12px;">Final recommendation</div>
+    <div style="font-size:18px;font-weight:500;margin-bottom:12px;">Launch: "The Renter's Edit" — A D2C Brand for No-Drill, Aesthetic Home Decor</div>
+    <p style="font-size:13px;line-height:1.7;color:var(--color-text-secondary);">Target product: <strong>Adhesive fabric wall panels + WFH corner bundles</strong> sold as a D2C brand to urban renters aged 25–35. Begin with Instagram → DM sales → Shopify + Amazon. Scale into corporate gifting and festival bundles by month 6. Expand to Singapore, UAE NRI market (who have the same renter problem) by month 12.</p>
+
+    <div class="verdict-grid">
+      <div class="verdict-item">
+        <div class="verdict-num" style="color:#185FA5;">₹0</div>
+        <div class="verdict-label">External funding needed to validate</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-num" style="color:#0F6E56;">3–4 weeks</div>
+        <div class="verdict-label">Time to first 10 sales</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-num" style="color:#854F0B;">Medium</div>
+        <div class="verdict-label">Difficulty level</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:1rem;">
+    <div class="section-title">Why this over all other gaps</div>
+    <div class="grid-2">
+      <div class="card"><h3>No incumbent</h3><p>No brand in India has specifically positioned itself as "decor for renters." The segment is served by accident, not by design. First-mover advantage is real here.</p></div>
+      <div class="card"><h3>Built-in virality</h3><p>Before/after room transformation content is the most saved, shared format on Indian Instagram. Every product is a content brief waiting to happen.</p></div>
+      <div class="card"><h3>Compounding TAM</h3><p>30M+ urban renters today, growing with migration to metros. Each customer is recurring: they move every 1–2 years and re-decorate. High LTV.</p></div>
+      <div class="card"><h3>Global playbook exists</h3><p>Etsy sellers in the US/UK doing ₹2–₹5Cr/year equivalent selling "renter-friendly decor." India has zero equivalent. Copy, localize, win.</p></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
